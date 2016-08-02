@@ -9,7 +9,7 @@ import org.jsoup.Jsoup
 import org.junit.Assert.*
 import org.junit.Test
 
-class RulesTest {
+class SenseTest {
 
     private fun haveDashes(text: String) = text.contains("-")
 
