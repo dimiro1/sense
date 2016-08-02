@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE.txt file.
 
-@file:JvmName("Ruleset")
+@file:JvmName("DSL")
 
 package com.github.dimiro1.sense.dsl
 
@@ -13,8 +13,8 @@ import com.github.dimiro1.sense.Reward
 import org.jsoup.nodes.Element
 import com.github.dimiro1.sense.Rules as SenseRules
 
-class Knowledge(val rules: MutableSet<Rule> = mutableSetOf(),
-                val rewards: MutableSet<Reward> = mutableSetOf()) {
+class RulesDSL(val rules: MutableSet<Rule> = mutableSetOf(),
+               val rewards: MutableSet<Reward> = mutableSetOf()) {
 
     fun rule(selector: String, ranker: (Element) -> Score): Rule {
         val rule = Rule(selector, ranker)
@@ -23,14 +23,14 @@ class Knowledge(val rules: MutableSet<Rule> = mutableSetOf(),
     }
 
     fun reward(selector: String, ranker: (Element) -> Amount): Reward {
-        val dslReward = Reward(selector, ranker)
-        rewards.add(dslReward)
-        return dslReward
+        val reward = Reward(selector, ranker)
+        rewards.add(reward)
+        return reward
     }
 }
 
-fun ruleset(init: Knowledge.() -> Unit): SenseRules {
-    val knowledge = Knowledge()
+fun rules(init: RulesDSL.() -> Unit): SenseRules {
+    val knowledge = RulesDSL()
     knowledge.init()
     return SenseRules(knowledge.rules, knowledge.rewards)
 }

@@ -4,7 +4,7 @@
 
 package com.github.dimiro1.sense
 
-import com.github.dimiro1.sense.dsl.ruleset
+import com.github.dimiro1.sense.dsl.rules
 import org.jsoup.Jsoup
 import org.junit.Assert.*
 import org.junit.Test
@@ -15,7 +15,7 @@ class SenseTest {
 
     @Test
     fun basicTest() {
-        val titleFinder = ruleset {
+        val titleFinder = rules {
             rule("metadata[property=og:title]") { Score(50.0, "title", it) }
             rule("title") { Score(40.0, "title", it) }
         }
@@ -39,7 +39,7 @@ class SenseTest {
 
     @Test
     fun noMatches() {
-        val titleFinder = ruleset {
+        val titleFinder = rules {
             rule("title") { Score(50.0, "title", it) }
         }
 
@@ -54,7 +54,7 @@ class SenseTest {
 
     @Test
     fun moreThanOneMatchInTheSameRule() {
-        val titleFinder = ruleset {
+        val titleFinder = rules {
             rule("p") { Score(50.0, "title", it) }
             reward("title") { Amount(if (haveDashes(it.text())) 0.5 else 1.0) }
         }
@@ -80,7 +80,7 @@ class SenseTest {
 
     @Test
     fun metadata() {
-        val titleFinder = ruleset {
+        val titleFinder = rules {
             rule("a") { Score(50.0, "title", it, mutableMapOf("text" to it.attr("data-title"))) }
         }
 
@@ -97,7 +97,7 @@ class SenseTest {
 
     @Test
     fun punishment() {
-        val titleFinder = ruleset {
+        val titleFinder = rules {
             rule("metadata[property=og:title]") { Score(50.0, "title", it) }
             rule("title") { Score(40.0, "title", it) }
             reward("title") {
@@ -124,7 +124,7 @@ class SenseTest {
 
     @Test
     fun invalidPunishment() {
-        val titleFinder = ruleset {
+        val titleFinder = rules {
             rule("metadata[property=og:title]") { Score(50.0, "title", it) }
             rule("title") { Score(40.0, "title", it) }
             reward("invalid") {
