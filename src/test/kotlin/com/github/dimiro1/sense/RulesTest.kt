@@ -16,10 +16,8 @@ class RulesTest {
     @Test
     fun basicTest() {
         val titleFinder = ruleset {
-            rules {
-                rule("metadata[property=og:title]") { Score(50.0, "title", it) }
-                rule("title") { Score(40.0, "title", it) }
-            }
+            rule("metadata[property=og:title]") { Score(50.0, "title", it) }
+            rule("title") { Score(40.0, "title", it) }
         }
 
         val knowledgeBase = titleFinder.score(Jsoup.parse("""
@@ -42,9 +40,7 @@ class RulesTest {
     @Test
     fun noMatches() {
         val titleFinder = ruleset {
-            rules {
-                rule("title") { Score(50.0, "title", it) }
-            }
+            rule("title") { Score(50.0, "title", it) }
         }
 
         val knowledgeBase = titleFinder.score(Jsoup.parse("""<html></html>"""))
@@ -59,12 +55,8 @@ class RulesTest {
     @Test
     fun moreThanOneMatchInTheSameRule() {
         val titleFinder = ruleset {
-            rules {
-                rule("p") { Score(50.0, "title", it) }
-            }
-            rewards {
-                reward("title") { Amount(if (haveDashes(it.text())) 0.5 else 1.0) }
-            }
+            rule("p") { Score(50.0, "title", it) }
+            reward("title") { Amount(if (haveDashes(it.text())) 0.5 else 1.0) }
         }
 
         val knowledgeBase = titleFinder.score(Jsoup.parse("""
@@ -89,9 +81,7 @@ class RulesTest {
     @Test
     fun metadata() {
         val titleFinder = ruleset {
-            rules {
-                rule("a") { Score(50.0, "title", it, mutableMapOf("text" to it.attr("data-title"))) }
-            }
+            rule("a") { Score(50.0, "title", it, mutableMapOf("text" to it.attr("data-title"))) }
         }
 
         val knowledgeBase = titleFinder.score(Jsoup.parse("""
@@ -108,14 +98,10 @@ class RulesTest {
     @Test
     fun punishment() {
         val titleFinder = ruleset {
-            rules {
-                rule("metadata[property=og:title]") { Score(50.0, "title", it) }
-                rule("title") { Score(40.0, "title", it) }
-            }
-            rewards {
-                reward("title") {
-                    Amount(if (haveDashes(it.text())) 0.5 else 1.0, mutableMapOf("reason" to "have dashes"))
-                }
+            rule("metadata[property=og:title]") { Score(50.0, "title", it) }
+            rule("title") { Score(40.0, "title", it) }
+            reward("title") {
+                Amount(if (haveDashes(it.text())) 0.5 else 1.0, mutableMapOf("reason" to "have dashes"))
             }
         }
 
@@ -139,14 +125,10 @@ class RulesTest {
     @Test
     fun invalidPunishment() {
         val titleFinder = ruleset {
-            rules {
-                rule("metadata[property=og:title]") { Score(50.0, "title", it) }
-                rule("title") { Score(40.0, "title", it) }
-            }
-            rewards {
-                reward("invalid") {
-                    Amount(if (haveDashes(it.text())) 0.5 else 1.0, mutableMapOf("reason" to "have dashes"))
-                }
+            rule("metadata[property=og:title]") { Score(50.0, "title", it) }
+            rule("title") { Score(40.0, "title", it) }
+            reward("invalid") {
+                Amount(if (haveDashes(it.text())) 0.5 else 1.0, mutableMapOf("reason" to "have dashes"))
             }
         }
 
