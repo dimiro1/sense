@@ -7,15 +7,15 @@ package com.github.dimiro1.sense
 import org.jsoup.nodes.Document
 
 /**
- * Rules have a list of all rules and offer a method to extract KnowledgeBase from
+ * Rules have a list of all rules and offer a method to extract Knowledge from
  * the document.
  */
 class Rules(val rules: Set<Rule>,
             val rewards: Set<Reward> = setOf()) {
     /**
-     * Apply the rules and return a KnowledgeBase about the document
+     * Apply the rules and return a Knowledge about the document
      */
-    fun score(document: Document): KnowledgeBase {
+    fun score(document: Document): Knowledge {
         val ruleResults = mutableMapOf<String, MutableSet<Score>>()
 
         // Apply dom rules
@@ -42,7 +42,7 @@ class Rules(val rules: Set<Rule>,
             }
         }
 
-        return KnowledgeBase(ruleResults)
+        return Knowledge(ruleResults)
     }
 }
 

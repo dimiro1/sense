@@ -5,10 +5,10 @@
 package com.github.dimiro1.sense
 
 /**
- * KnowledgeBase is a container for querying facts, where a fact has a
+ * Knowledge is a container for querying facts, where a fact has a
  * flavor, a score, and some other arbitrary metadata.
  */
-class KnowledgeBase(val nodesByFlavor: Map<String, Set<Score>>) {
+class Knowledge(val nodesByFlavor: Map<String, Set<Score>>) {
     /**
      * Return the highest-scored node of the given flavor, null if
      * there is none.
