@@ -30,7 +30,7 @@ class RulesDSL(val rules: MutableSet<Rule> = mutableSetOf(),
 }
 
 fun rules(init: RulesDSL.() -> Unit): SenseRules {
-    val knowledge = RulesDSL()
-    knowledge.init()
-    return SenseRules(knowledge.rules, knowledge.rewards)
+    val dsl = RulesDSL()
+    dsl.init()
+    return SenseRules(dsl.rules, dsl.rewards)
 }
