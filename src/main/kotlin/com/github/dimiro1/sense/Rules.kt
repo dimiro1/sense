@@ -16,33 +16,33 @@ class Rules(val rules: Set<Rule>,
      * Apply the rules and return a Knowledge about the document
      */
     fun score(document: Document): Knowledge {
-        val ruleResults = mutableMapOf<String, MutableSet<Score>>()
+        val rulesScores = mutableMapOf<String, MutableSet<Score>>()
 
         // Apply dom rules
         for (rule in rules) {
             for (element in document.select(rule.selector)) {
                 val result = rule.ranker(element)
 
-                if (!ruleResults.containsKey(result.flavor)) {
-                    ruleResults[result.flavor] = mutableSetOf()
+                if (!rulesScores.containsKey(result.flavor)) {
+                    rulesScores[result.flavor] = mutableSetOf()
                 }
 
-                ruleResults[result.flavor]?.add(result)
+                rulesScores[result.flavor]?.add(result)
             }
         }
 
-        // Apply flavors rules
+        // Apply rewards
         for (reward in rewards) {
-            for ((key, value) in ruleResults.filter { it.key == reward.selector }) {
-                for (node in value) {
-                    val punishmentResult = reward.ranker(node.element)
-                    node.score *= punishmentResult.score
-                    node.metadata.putAll(punishmentResult.metadata)
+            for ((selector, scores) in rulesScores.filter { it.key == reward.selector }) {
+                for (score in scores) {
+                    val punishmentResult = reward.ranker(score.element)
+                    score.score *= punishmentResult.score
+                    score.metadata.putAll(punishmentResult.metadata)
                 }
             }
         }
 
-        return Knowledge(ruleResults)
+        return Knowledge(rulesScores)
     }
 }
 
